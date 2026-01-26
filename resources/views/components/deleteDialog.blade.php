@@ -16,9 +16,10 @@
             <p class="text-slate-500 text-sm mb-6">ဤအချက်အလက်ကို ဖျက်ရန် သေချာပါသလား? ဤလုပ်ဆောင်ချက်ကို ပြန်ပြင်၍မရပါ။</p>
 
             <div class="flex flex-col gap-2">
-                <form action="{{ url($type.'/delete/'.$item->id) }}" method="POST">
+                <form action="{{ route('facts.delete', $item->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
+                     <input type="hidden" name="type" value="{{$type}}">
                     <button type="submit" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition shadow-lg shadow-red-100">
                         အတည်ပြုဖျက်မည်
                     </button>

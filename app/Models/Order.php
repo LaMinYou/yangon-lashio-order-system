@@ -53,11 +53,17 @@ class Order extends Model
         $query->when($filter['status'] ?? false, function ($query, $status) {
             $query->where('status', $status);
         });
-        $query->when($filter['from_date'] ?? false, function($query, $from_date){
+        $query->when($filter['from_date'] ?? false, function ($query, $from_date) {
             $query->whereDate('export_date', '>=', $from_date);
         });
-        $query->when($filter['to_date'] ?? false, function($query, $to_date){
+        $query->when($filter['to_date'] ?? false, function ($query, $to_date) {
             $query->whereDate('export_date', '<=', $to_date);
+        });
+        $query->when($filter['nameunit'] ?? false, function ($query, $nameunit) {
+            $query->where(function ($q) use ($nameunit) {
+                $q->where('product_name', 'like', "%{$nameunit}%")
+                    ->orWhere('unit', 'like', "%{$nameunit}%");
+            });
         });
     }
 }

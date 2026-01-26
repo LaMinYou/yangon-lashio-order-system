@@ -56,14 +56,14 @@ class OrderController extends Controller
             $order->unit = $request->unit;
             $order->price = $request->price;
             $order->total = $request->total;
-            $order->status = $request->status;
+            $order->status = "ပို့နေဆဲ";
             $order->shop_id = $request->shop_id;
             $order->gate_id = $request->gate_id;
             $order->weightfee = $request->weight_price;
             $order->save();
             return back()->with('success', 'အောင်မြင်စွာ တင်သွင်းပြီးပါပြီ။');
         } catch (\Exception $e) {
-            return back()->with('error', 'တင်သွင်းရာတွင် အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
+            return back()->with('error', 'တင်သွင်းရာတွင် အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။'.$e);
         }
     }
     public function index()
@@ -71,8 +71,7 @@ class OrderController extends Controller
         $orders = Order::query()
             ->orderBy('status', 'asc')
             ->orderBy('created_at', 'desc')
-            // Ensure your filter scope handles 'search', 'status', and 'date'
-            ->filter(request(['search', 'status', 'from_date', 'to_date']))
+            ->filter(request(['status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
             ->withQueryString(); // Keeps filters active when clicking 'Next/Previous'
 
@@ -83,8 +82,9 @@ class OrderController extends Controller
         $orders = Order::where('user_id', $id)
             ->orderBy('status', 'asc')
             ->orderBy('created_at', 'desc')
-            ->filter(request(['status', 'from_date', 'to_date']))
-            ->simplePaginate(5);
+            ->filter(request(['status', 'from_date', 'to_date', 'nameunit']))
+            ->simplePaginate(5)
+            ->withQueryString();
         return view('orders', compact('orders'));
     }
 

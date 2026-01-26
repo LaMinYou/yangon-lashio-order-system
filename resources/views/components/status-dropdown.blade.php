@@ -22,13 +22,13 @@
         <li>
             @if(auth()->id() == 2)
             <a 
-                href="/orders/?status={{$status}}{{request('from_date')?'&from_date='.request('from_date'):''}}{{request('to_date')?'&to_date='.request('to_date'):''}}"
+                href="/orders/?status={{$status}}{{request('from_date')?'&from_date='.request('from_date'):''}}{{request('to_date')?'&to_date='.request('to_date'):''}}{{request('nameunit')?'&nameunit='.request('nameunit'):''}}"
                 class="block px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700">
                 {{ $status }}
             </a>
             @elseif(auth()->id() == 1)
             <a 
-                href="/user/{{auth()->id()}}/orders/?status={{$status}}{{request('from_date')?'&from_date='.request('from_date'):''}}{{request('to_date')?'&to_date='.request('to_date'):''}}"
+                href="/user/{{auth()->id()}}/orders/?status={{$status}}{{request('from_date')?'&from_date='.request('from_date'):''}}{{request('to_date')?'&to_date='.request('to_date'):''}}{{request('nameunit')?'&nameunit='.request('nameunit'):''}}"
                 class="block px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700">
                 {{ $status }}
             </a>

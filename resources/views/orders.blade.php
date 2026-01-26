@@ -54,10 +54,10 @@
 
             <!-- name,unit search -->
             <div class="md:col-span-2">
-                <label for="fromDate" class="block text-gray-700 font-medium mb-1">Name, Unit</label>
+                <label for="nameunit" class="block text-gray-700 font-medium mb-1">Product Name or Unit</label>
                 <input type="text" id="nameunit" name="nameunit"
                     value="{{ request('nameunit') }}"
-                    placeholder="name and unit"
+                    placeholder="ကုန်ပစ္စည်းအမည် (သို့) unit ဖြင့်ရှာရန် "
                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700">
             </div>
 
@@ -88,8 +88,8 @@
             <img src="{{ asset('images/empty.gif') }}" alt="empty" class="max-w-xs">
         </div>
 
-        <div class="text-center py-12">
-            <p class="text-slate-500 mt-4">လက်တလောတင်ပို့ကုန်များမရှိသေးပါ</p>
+        <div class="text-center py-3">
+            <p class="text-slate-500">လက်တလောတင်ပို့ကုန်များမရှိသေးပါ</p>
         </div>
         @endforelse
     </div>

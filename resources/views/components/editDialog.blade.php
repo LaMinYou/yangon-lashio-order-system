@@ -30,12 +30,11 @@
                     လိုအပ်သော အချက်အလက်များကို ပြင်ဆင်ပြီးနောက် "အပ်ဒိတ်လုပ်ရန်" ကို နှိပ်ပါ။
                 </p>
 
-                <form action="{{ url($type.'/update/'.$item->id) }}" method="POST" class="text-left">
+                <form action="{{ route('facts.update', $item->id) }}" method="POST" class="text-left">
                     @csrf
-                    @method('PUT')
-
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">အမည် (Name)</label>
+                        <input type="hidden" name="type" value="{{$type}}">
                         <input type="text" name="name" value="{{ $item->name }}"
                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition">
                     </div>

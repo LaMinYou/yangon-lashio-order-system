@@ -12,31 +12,31 @@
 
         {{-- Success/Error Modal Logic --}}
         @if(session('success') || session('error'))
-        <x-modal>
-            <div class="p-6 text-center">
-                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full {{ session('success') ? 'bg-green-100' : 'bg-red-100' }} mb-4">
+        <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-start my-3 justify-center px-4">
+            <div class="bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white max-w-sm w-full text-center">
+                <div class="mb-4 text-6xl">
                     @if(session('success'))
-                        <i class="fa-solid fa-check text-2xl text-green-600"></i>
+                    <i class="fa-solid fa-check text-2xl text-green-600"></i>
                     @else
-                        <i class="fa-solid fa-xmark text-2xl text-red-600"></i>
+                    <i class="fa-solid fa-xmark text-2xl text-red-600"></i>
                     @endif
                 </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                    {{ session('success') ? 'အောင်မြင်ပါသည်။' : 'မှားယွင်းနေပါသည်။' }}
-                </h3>
-                <p class="text-gray-500">{{ session('success') ?? session('error') }}</p>
+                <p class="font-bold text-lg mb-6
+                    {{ session('success')? 'text-green-700' : 'text-red-700' }}">
+                    {{ session('success') ?? session('error') }}
+                </p>
+                <button @click="show = false" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold">
+                    Done
+                </button>
             </div>
-        </x-modal>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => document.querySelector('.modalBtn')?.click());
-        </script>
+        </div>
         @endif
 
         <form class="p-6 sm:p-8" action="{{ url('order/add') }}" method="POST">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5">
-                
+
                 <div class="md:col-span-3">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">တင်ပို့သည့်ရက်စွဲ</label>
                     <input type="date" name="export_date" required
@@ -49,7 +49,7 @@
                         class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
                         <option value="">ပွဲရုံအမည်ရွေးပါ</option>
                         @foreach($areas as $area)
-                            <option value="{{ $area->id }}">{{ $area->name }}</option>
+                        <option value="{{ $area->id }}">{{ $area->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -60,7 +60,7 @@
                         class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
                         <option value="">ရွေးချယ်ရန်</option>
                         @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -118,7 +118,7 @@
                     <select name="gate_id" required
                         class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                         @foreach($gates as $gate)
-                            <option value="{{ $gate->id }}">{{ $gate->name }}</option>
+                        <option value="{{ $gate->id }}">{{ $gate->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -134,14 +134,14 @@
                     <select name="shop_id" class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                         <option value="">ဆိုင်အမည်ရွေးပါ (Optional)</option>
                         @foreach($shops as $shop)
-                            <option value="{{ $shop->id }}">{{ $shop->name }}</option>
+                        <option value="{{ $shop->id }}">{{ $shop->name }}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
 
             <div class="mt-8">
-                <button type="submit" 
+                <button type="submit"
                     class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform transition hover:-translate-y-0.5 active:scale-95">
                     အချက်အလက်များကို သိမ်းဆည်းမည်
                 </button>
@@ -154,40 +154,40 @@
 
 {{-- JS for category → product & price calculation --}}
 <script>
-$(document).ready(function() {
-    const baseUrl = "{{ url('') }}";
+    $(document).ready(function() {
+        const baseUrl = "{{ url('') }}";
 
-    // 1️⃣ Category → Product AJAX
-    $('#category').on('change', function() {
-        const categoryId = $(this).val();
-        $('#product').html('<option value="">ကုန်အမည်ရွေးပါ</option>');
+        // 1️⃣ Category → Product AJAX
+        $('#category').on('change', function() {
+            const categoryId = $(this).val();
+            $('#product').html('<option value="">ကုန်အမည်ရွေးပါ</option>');
 
-        if(categoryId) {
-            $.ajax({
-                url: baseUrl + '/api/products/' + categoryId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(res) {
-                    $.each(res, function(_, product) {
-                        $('#product').append('<option value="' + product.name + '">' + product.name + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', error);
-                }
-            });
+            if (categoryId) {
+                $.ajax({
+                    url: baseUrl + '/api/products/' + categoryId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        $.each(res, function(_, product) {
+                            $('#product').append('<option value="' + product.name + '">' + product.name + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                    }
+                });
+            }
+        });
+
+        // 2️⃣ Price Calculation
+        function calculateTotal() {
+            const price = parseFloat($('#price').val().replace(/[^\d.]/g, '')) || 0;
+            const netWeight = parseFloat($('#netweight').val().replace(/[^\d.]/g, '')) || 0;
+            $('#total').val((price * netWeight).toFixed(2));
         }
+
+        $('#price, #netweight').on('input', calculateTotal);
     });
-
-    // 2️⃣ Price Calculation
-    function calculateTotal() {
-        const price = parseFloat($('#price').val().replace(/[^\d.]/g, '')) || 0;
-        const netWeight = parseFloat($('#netweight').val().replace(/[^\d.]/g, '')) || 0;
-        $('#total').val((price * netWeight).toFixed(2));
-    }
-
-    $('#price, #netweight').on('input', calculateTotal);
-});
 </script>
 
 <link rel="stylesheet" href="{{ asset('css/product.css') }}">

@@ -26,17 +26,22 @@
 <div class="max-w-4xl mx-auto px-6 py-12">
 
     @if(session('success') || session('error'))
-        <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center px-4">
+        <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-start my-3 justify-center px-4">
             <div class="bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white max-w-sm w-full text-center">
                 <div class="mb-4 text-6xl">
                     @if(session('success'))
-                        <span class="text-emerald-500">check_circle</span>
+                        <i class="fa-solid fa-check text-2xl text-green-600"></i>
                     @else
-                        <span class="text-amber-500">warning</span>
+                        <i class="fa-solid fa-xmark text-2xl text-red-600"></i>
                     @endif
                 </div>
-                <p class="text-slate-800 font-bold text-lg mb-6">{{ session('success') ?? session('error') }}</p>
-                <button @click="show = false" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold">Done</button>
+                <p class="font-bold text-lg mb-6
+                    {{ session('success')? 'text-green-700' : 'text-red-700' }}">
+                    {{ session('success') ?? session('error') }}
+                </p>
+                <button @click="show = false" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold">
+                    Done
+                </button>
             </div>
         </div>
     @endif

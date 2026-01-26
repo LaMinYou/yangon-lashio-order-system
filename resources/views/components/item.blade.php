@@ -1,4 +1,4 @@
-@props(['item', 'type'])
+@props(['item', 'delete' => null, 'type'])
 
 <div x-data="{ editOpen: false, deleteOpen: false }" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all mb-4 max-w-2xl mx-auto">
     <div class="flex items-center justify-between">
@@ -23,11 +23,13 @@
                 class="p-2 text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
                 <i class="fa-regular fa-pen-to-square text-lg"></i>
             </button>
-
+            
+            @if(!empty($delete))
             <button @click="deleteOpen = true" type="button"
                 class="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
                 <i class="fa-solid fa-trash-can text-lg"></i>
             </button>
+            @endif
         </div>
     </div>
 
