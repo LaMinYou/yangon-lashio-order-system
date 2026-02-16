@@ -24,6 +24,7 @@
         <!-- Status Dropdown -->
         <div class="md:w-1/4 w-full">
             <x-status-dropdown></x-status-dropdown>
+            <x-referto-dropdown></x-referto-dropdown>
         </div>
 
         <!-- Date Filter Form -->
@@ -31,6 +32,10 @@
             action="{{ auth()->user()->id == 2 ? url('/orders/') : url('/user/'.auth()->id().'/orders') }}"
             method="get"
             class="md:w-3/4 w-full grid grid-cols-1 md:grid-cols-12 gap-4">
+
+            @if(request('shop'))
+            <input type="hidden" name="shop" value="{{ request('shop') }}">
+            @endif
 
             @if(request('status'))
             <input type="hidden" name="status" value="{{ request('status') }}">

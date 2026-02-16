@@ -113,6 +113,10 @@
                 <p class="text-[10px] font-bold text-slate-400 uppercase">ဈေးနှုန်း / Unit</p>
                 <p class="text-slate-700 font-medium">{{ number_format($order->price) }} MMK ({{ $order->unit->name }})</p>
             </div>
+            <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase">လွှဲပြောင်းထားသောဆိုင်</p>
+                <p class="text-slate-700 font-medium">{{ isset($order->shop_id)? $order->shop->name : ' - ' }}</p>
+            </div>
             @if(auth()->user()->role_id == 2)
                 <div>
                     <p class="text-[10px] font-bold text-slate-400 uppercase">သင့်ငွေ</p>

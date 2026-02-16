@@ -56,6 +56,16 @@ class Order extends Model
         $query->when($filter['status'] ?? false, function ($query, $status) {
             $query->where('status', $status);
         });
+        $query->when($filter['shop']?? false, function ($query, $shop){
+            if($shop == "all"){
+                $query->whereNotNull('shop_id');
+            }
+            else{
+                $query->whereHas('shop', function ($q) use($shop){
+                    $q->where('name', $shop);
+                });
+            }
+        });
         $query->when($filter['from_date'] ?? false, function ($query, $from_date) {
             $query->whereDate('export_date', '>=', $from_date);
         });

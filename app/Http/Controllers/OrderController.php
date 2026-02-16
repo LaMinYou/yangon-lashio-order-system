@@ -72,7 +72,7 @@ class OrderController extends Controller
         $orders = Order::query()
             ->orderBy('status', 'asc')
             ->orderBy('created_at', 'desc')
-            ->filter(request(['status', 'from_date', 'to_date', 'nameunit']))
+            ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
             ->withQueryString(); // Keeps filters active when clicking 'Next/Previous'
 
@@ -83,7 +83,7 @@ class OrderController extends Controller
         $orders = Order::where('user_id', $id)
             ->orderBy('status', 'asc')
             ->orderBy('created_at', 'desc')
-            ->filter(request(['status', 'from_date', 'to_date', 'nameunit']))
+            ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
             ->withQueryString();
         return view('orders', compact('orders'));

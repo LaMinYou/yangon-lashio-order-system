@@ -154,6 +154,22 @@
                 </form>
             </div>
         </div>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl overflow-hidden transition-all duration-300">
+            <button @click="activeForm = (activeForm === 'shop' ? null : 'shop')" class="w-full flex items-center gap-4 p-6 text-white group">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
+                    <i class="fa-solid fa-building-columns text-xl"></i>
+                </div>
+                <span class="font-bold text-lg">လွှဲပြောင်းအမည်(Refer to)ထည့်ရန်</span>
+                <i class="fa-solid fa-chevron-down ml-auto transition-transform" :class="activeForm === 'shop' ? 'rotate-180' : ''"></i>
+            </button>
+            <div x-show="activeForm === 'shop'" x-collapse>
+                <form action="{{ url('/shop/add') }}" method="POST" class="p-6 pt-0">
+                    @csrf
+                    <input type="text" name="shop" placeholder="လွှဲပြောင်းအမည်" class="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white mb-4">
+                    <button class="w-full py-3 bg-emerald-600 text-white rounded-2xl font-bold">သိမ်းရန်</button>
+                </form>
+            </div>
+        </div>
 
     </div>
 </div>
