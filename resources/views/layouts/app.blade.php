@@ -200,19 +200,20 @@
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-bold mb-4">Product</h4>
+                    <h4 class="font-bold mb-4">Products</h4>
                     <ul class="text-slate-500 space-y-2">
-                        <li>Features</li>
+                        <!-- <li>Features</li>
                         <li>Pricing</li>
-                        <li>Integrations</li>
+                        <li>Integrations</li> -->
+                        <li>ငါးခြောက်</li>
+                        <li>ပုစွန်ခြောက်</li>
+                        <li>ငါးပိ</li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4">Support</h4>
                     <ul class="text-slate-500 space-y-2">
-                        <li>Help Center</li>
-                        <li>Contact Us</li>
-                        <li>Terms of Service</li>
+                        <li>ကုန်စည်တင်ပို့ခြင်း</li>
                     </ul>
                 </div>
             </div>

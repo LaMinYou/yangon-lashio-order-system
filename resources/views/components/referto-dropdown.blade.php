@@ -56,11 +56,11 @@
         @endforeach
 
         {{-- NONE = No Filter --}}
-    <li>
-        <a href="{{ request()->fullUrlWithQuery(['shop' => null]) }}"
-           class="block px-4 py-2 hover:bg-green-100">
-            အားလုံး (Filter မလုပ်ပါ)
-        </a>
-    </li>
+        <li>
+            <a href="{{ request()->fullUrlWithQuery(['shop' => null]) }}"
+                class="block px-4 py-2 hover:bg-green-100">
+                အားလုံး (Filter မလုပ်ပါ)
+            </a>
+        </li>
     </ul>
 </div>

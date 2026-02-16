@@ -47,8 +47,8 @@
     @endif
 
     <div class="mb-10 text-center">
-        <h2 class="text-3xl font-black text-white mb-2">Management Hub</h2>
-        <p class="text-indigo-100/80 italic">အချက်အလက်အသစ်များ ထည့်သွင်းရန်</p>
+        <!-- <h2 class="text-3xl font-black text-white mb-2">Management Hub</h2> -->
+        <p class="text-3xl font-black text-indigo-100/80 italic">အချက်အလက်အသစ်များ ထည့်သွင်းရန်</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ activeForm: null }">
