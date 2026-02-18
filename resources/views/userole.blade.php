@@ -29,7 +29,7 @@
          <input type="hidden" name="role" class="role" value="1" required>
           <div class="max-w-xl mx-auto text-center space-y-8">
               <p class="text-stone-500 tracking-wide">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, similique!
+                ‌ကျေးဇူးပြုဤအသုံးပြုသူကိုမှန်ကန်စွာရွေးချယ်ပါ။
               </p>
               <div class="max-w-xs mx-auto">
                   <button  type="submit" class="btn-continue">Continue</button>

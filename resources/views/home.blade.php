@@ -16,13 +16,13 @@
                 </h1>
 
                 <p class="text-xl text-slate-600 leading-relaxed">
-                    Streamline your trade between Yangon and Lashio. Our specialized system handles weight-based pricing, cargo tracking, and instant digital billing.
+                    Yangon–Lashio Shipping System သည် ပင်လယ်ထွက်ကုန်များကို အချိန်မီနှင့် စနစ်တကျ တင်ပို့ပေးသော စနစ်တစ်ခုဖြစ်ပါသည်။ အသုံးပြုသူများအနေဖြင့် တင်ပို့ပြီးသော ထွက်ကုန်များ၏ စာရင်းများကို လွယ်ကူစွာ တွက်ချက်နိုင်ပြီး တင်ပို့ထားသော ပစ္စည်းအချက်အလက်များကို ပြန်လည်ကြည့်ရှုနိုင်ပါသည်။
                 </p>
 
                 <div class="flex gap-4">
-                    <a href="{{ route('register') }}"
+                    <a href="{{ url('/order/add') }}"
                        class="bg-indigo-600 px-8 py-4 rounded-xl text-white font-bold hover:scale-105 transition shadow-xl">
-                        Start Shipping
+                       တင်ပို့ကုန်ထည့်သွင်းရန်
                     </a>
 
                     <a href="#features"
@@ -34,7 +34,6 @@
 
             <div class="md:w-1/2 relative">
                 <div class="absolute -top-10 -right-10 w-64 h-64 bg-indigo-300 rounded-full mix-blend-multiply blur-3xl opacity-30"></div>
-
                 <img
                     src="{{ asset('images/fishandshrimp-1.jpg') }}"
                     alt="Shipping Cargo"
@@ -49,11 +48,9 @@
     <section id="features" class="max-w-7xl mx-auto py-24 px-6">
         <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <h2 class="text-4xl font-bold text-slate-900">
-                Why Modern Logistics Need DokanE
+                ဘာကြောင့် ရွေးချယ်သင့်သလဲ
             </h2>
-            <p class="text-slate-500 text-lg">
-                The most powerful POS and tracking tool designed for Myanmar's trading routes.
-            </p>
+            
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -61,42 +58,33 @@
             <!-- Card 1 -->
             <div class="group p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition">
                 <div class="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 transition">
-                    <svg class="w-8 h-8 text-indigo-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                              d="M3 6l3 1m0 0l-3 9a5 5 0 006 0M6 7l3 9M6 7l6-2"/>
-                    </svg>
+                    <i class="fa-solid fa-scale-balanced text-2xl text-indigo-600 group-hover:text-white"></i>
                 </div>
                 <h3 class="text-xl font-bold mb-4">Weight-Based Pricing</h3>
                 <p class="text-slate-600 leading-relaxed">
-                    Precision billing integrated with scales. Perfect for seafood and bulk cargo.
+                    ကျွန်တော်တို့၏ စနစ်သည် အလေးချိန်ပေါ်မူတည်၍ တွက်ချက်ပေးသော စနစ်ဖြစ်ပါသည်။ ထို့ကြောင့် သင့်အနေဖြင့် စာရွက်စာတမ်းများ များစွာမလိုအပ်ဘဲ လွယ်ကူအဆင်ပြေစွာ တွက်ချက်နိုင်ပါသည်။
                 </p>
             </div>
 
             <!-- Card 2 -->
             <div class="group p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition">
                 <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 transition">
-                    <svg class="w-8 h-8 text-emerald-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                              d="M9 5H7a2 2 0 00-2 2v12"/>
-                    </svg>
+                    <i class="fa-solid fa-route text-2xl text-emerald-600 group-hover:text-white"></i>
                 </div>
                 <h3 class="text-xl font-bold mb-4">Route Management</h3>
                 <p class="text-slate-600 leading-relaxed">
-                    Dedicated tracking for Yangon–Lashio corridor with live updates.
+                    ပို့ဆောင်ရေးအတွက် သက်ဆိုင်ရာ ဆိုင်နာမည်ကို စနစ်အတွင်းမှ ရွေးချယ်သတ်မှတ်နိုင်ပါသည်။
                 </p>
             </div>
 
             <!-- Card 3 -->
             <div class="group p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition">
                 <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-600 transition">
-                    <svg class="w-8 h-8 text-orange-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                              d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
+                    <i class="fa-solid fa-bolt text-2xl text-orange-600 group-hover:text-white"></i>
                 </div>
                 <h3 class="text-xl font-bold mb-4">Fast Digital Billing</h3>
                 <p class="text-slate-600 leading-relaxed">
-                    Generate invoices instantly and reduce waiting time.
+                    ငွေကြေးတွက်ချက်မှုကို အချိန်မီနှင့် ထိရောက်စွာ လုပ်ဆောင်နိုင်ပါသည်။
                 </p>
             </div>
         </div>
@@ -126,10 +114,6 @@
                         မှားယွင်းမှုရှိပါက ပြန်လည်ပြင်ဆင်နိုင်သည်
                     </li>
                 </ul>
-
-                <a href="#" class="inline-block mt-8 text-indigo-400 font-bold border-b-2 border-indigo-400 hover:text-indigo-300">
-                    Learn More About Security →
-                </a>
             </div>
 
             <div class="md:w-1/2 rounded-3xl overflow-hidden shadow-2xl">
