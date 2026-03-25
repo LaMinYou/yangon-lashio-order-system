@@ -1,66 +1,53 @@
-# ===============================
-# Stage 1: Composer / PHP Dependencies
-# ===============================
-FROM composer:latest AS vendor
-
-# Install PHP extensions required for Composer dependencies
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    zip unzip git \
-    && docker-php-ext-configure gd --with-jpeg --with-freetype \
-    && docker-php-ext-install gd zip bcmath intl
-
+# Stage 1: PHP Dependencies
+FROM composer:latest as vendor
 WORKDIR /app
-
-# Copy composer files and install dependencies
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
+# We ignore platform reqs here because we install them in the final stage
+RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs
 
-# ===============================
-# Stage 2: Frontend Build
-# ===============================
-FROM node:20-alpine AS frontend
+# Stage 2: Node Dependencies & Build
+FROM node:20-alpine as frontend
 WORKDIR /app
-
-# Copy all frontend files and build assets
-COPY . .
+COPY package.json package-lock.json vite.config.js tailwind.config.js* postcss.config.js* ./ 
+COPY resources ./resources
+COPY public ./public
 RUN npm install && npm run build
 
-# ===============================
 # Stage 3: Final Production Image
-# ===============================
 FROM php:8.3-fpm-alpine
 
-# Install runtime PHP extensions for Laravel
+# Install system dependencies using APK (Alpine's manager)
 RUN apk add --no-cache \
     libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
     libzip-dev \
-    zip unzip git \
+    zip \
+    unzip \
+    git \
     oniguruma-dev \
     icu-dev \
-    bash \
-    && docker-php-ext-configure gd --with-jpeg --with-freetype \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    bash
+
+# Configure and install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring zip intl bcmath gd
 
 WORKDIR /var/www
 
-# Copy application code
+# Copy code
 COPY . .
 
-# Copy Composer vendor from Stage 1
+# Copy vendor from Stage 1 and built assets from Stage 2
 COPY --from=vendor /app/vendor ./vendor
-
-# Copy built frontend assets from Stage 2
 COPY --from=frontend /app/public/build ./public/build
 
-# Set permissions for Laravel
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+# Generate the final autoloader
+COPY --from=vendor /usr/bin/composer /usr/bin/composer
+RUN composer dump-autoload --optimize --no-dev
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 8000
 
