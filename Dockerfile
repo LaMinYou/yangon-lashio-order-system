@@ -1,46 +1,38 @@
-# Stage 1: PHP Dependencies
-FROM composer:latest as vendor
-WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs
-
-# Stage 2: Node Dependencies
-FROM node:20-alpine as frontend
-WORKDIR /app
-COPY package.json package-lock.json vite.config.js tailwind.config.js* postcss.config.js* ./ 
-COPY resources ./resources
-COPY public ./public
-RUN npm install && npm run build
-
-# Stage 3: Final Production Image (UPGRADED TO 8.4)
+# Use PHP 8.3 FPM Alpine
 FROM php:8.4-fpm-alpine
 
+# 1. Install Node.js (needed for Vite/Tailwind)
+COPY --from=node:20-alpine /usr/lib /usr/lib
+COPY --from=node:20-alpine /usr/local/share /usr/local/share
+COPY --from=node:20-alpine /usr/local/lib /usr/local/lib
+COPY --from=node:20-alpine /usr/local/bin /usr/local/bin
+
+# 2. Install system dependencies for PHP extensions
 RUN apk add --no-cache \
-    libpng-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    git \
-    oniguruma-dev \
-    icu-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    bash
+    git curl libpng-dev libxml2-dev zip unzip oniguruma-dev libzip-dev icu-dev
 
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring zip intl bcmath gd
+# 3. Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
 
+# 4. Get Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# 5. Setup working directory
 WORKDIR /var/www
-COPY . .
-COPY --from=vendor /app/vendor ./vendor
-COPY --from=frontend /app/public/build ./public/build
-COPY --from=vendor /usr/bin/composer /usr/bin/composer
+COPY . /var/www
 
-# Added --ignore-platform-reqs just to be extra safe during the dump
-RUN composer dump-autoload --optimize --no-dev --ignore-platform-reqs
+# 6. INSTALL PHP DEPENDENCIES (Fixes your error)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# 7. INSTALL NODE & BUILD ASSETS (Fixes CSS/JS issues)
+RUN npm install && npm run build
 
+# 8. Set correct permissions for Laravel
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
+# 9. Expose port 8000 for Coolify
 EXPOSE 8000
 
+# Start Laravel's built-in server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
