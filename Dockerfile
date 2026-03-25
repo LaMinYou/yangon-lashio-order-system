@@ -31,8 +31,15 @@ RUN npm install && npm run build
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# 9. Expose port 8000 for Coolify
+# ... (after your existing RUN apk add)
+RUN apk add --no-cache netcat-openbsd
+
+# ... (after your existing RUN chown/chmod)
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Change EXPOSE to match your serve port
 EXPOSE 8000
 
-# Start Laravel's built-in server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Use the entrypoint script instead of a direct CMD
+ENTRYPOINT ["entrypoint.sh"]
