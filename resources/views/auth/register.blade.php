@@ -9,7 +9,7 @@
 
     <div class="w-full max-w-sm space-y-1 md:space-y-10 md:p-6 p-6">
         <div class="space-y-3 text-center">
-            <h1 class="text-4xl font-bold text-stone-900">Sign up</h1>
+            <h1 class="text-4xl font-bold text-stone-900">အကောင့်ဖွင့်ရန်</h1>
             <p class="text-stone-500 text-base leading-relaxed">
                 အချက်အလက်များကို မှန်ကန်စွာ ဖြည့်သွင်းပါ
             </p>
@@ -20,7 +20,7 @@
 
             {{-- Name Field --}}
             <div>
-                <label class="block text-sm font-medium text-stone-700">Name</label>
+                <label class="block text-sm font-medium text-stone-700">နာမည်</label>
                 <input
                     type="text"
                     name="name"
@@ -105,7 +105,7 @@
         <p class="text-center text-stone-500 text-sm">
             Account ရှိပြီးသားလား?
             <a href="{{ route('login') }}" class="text-indigo-500 font-bold">
-                Sign in
+                အကောင့်၀င်ရန်
             </a>
         </p>
     </div>

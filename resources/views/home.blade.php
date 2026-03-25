@@ -37,7 +37,6 @@
 
             <div class="md:w-1/2 relative">
                 <div class="absolute -top-10 -right-10 w-64 h-64 bg-indigo-300 rounded-full mix-blend-multiply blur-3xl opacity-30"></div>
-
                 <img
                     src="{{ asset('images/fishandshrimp-1.jpg') }}"
                     alt="Shipping Cargo"
@@ -65,10 +64,7 @@
             <!-- Card 1 -->
             <div class="group p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition">
                 <div class="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 transition">
-                    <svg class="w-8 h-8 text-indigo-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                              d="M3 6l3 1m0 0l-3 9a5 5 0 006 0M6 7l3 9M6 7l6-2"/>
-                    </svg>
+                    <i class="fa-solid fa-scale-balanced text-2xl text-indigo-600 group-hover:text-white"></i>
                 </div>
                 <h3 class="text-xl font-bold mb-4">Weight-Based Pricing</h3>
                 <p class="text-slate-600 leading-relaxed">
@@ -80,10 +76,7 @@
             <!-- Card 2 -->
             <div class="group p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition">
                 <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 transition">
-                    <svg class="w-8 h-8 text-emerald-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                              d="M9 5H7a2 2 0 00-2 2v12"/>
-                    </svg>
+                    <i class="fa-solid fa-route text-2xl text-emerald-600 group-hover:text-white"></i>
                 </div>
                 <h3 class="text-xl font-bold mb-4">Route Management</h3>
                 <p class="text-slate-600 leading-relaxed">
@@ -95,10 +88,7 @@
             <!-- Card 3 -->
             <div class="group p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition">
                 <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-600 transition">
-                    <svg class="w-8 h-8 text-orange-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                              d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
+                    <i class="fa-solid fa-bolt text-2xl text-orange-600 group-hover:text-white"></i>
                 </div>
                 <!-- <h3 class="text-xl font-bold mb-4">Fast Digital Billing</h3>
                 <p class="text-slate-600 leading-relaxed">
