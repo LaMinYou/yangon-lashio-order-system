@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'admin@123#abc',
             'role_id' => 2,
         ]);
-        
+
         Role::create(['name' => 'user']);
         Role::create(['name' => 'admin']);
 
