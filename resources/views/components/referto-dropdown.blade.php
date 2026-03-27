@@ -17,7 +17,7 @@
         x-cloak
         style="display: none;"
         @click.outside="open = false"
-        class="absolute  left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-[110] max-h-60 overflow-y-auto py-1">
+        class="absolute  left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-[110] max-h-60 overflow-y-auto py-1 px-0">
 
         <li>
             @php

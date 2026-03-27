@@ -65,7 +65,7 @@
             </button>
 
             <div x-show="activeForm === 'category'" x-collapse>
-                <form action="{{ url('/category/add') }}" method="POST" class="p-6 pt-0">
+                <form action="{{ route('categories.store') }}" method="POST" class="p-6 pt-0">
                     @csrf
                     <input type="text" name="category" placeholder="ဥပမာ - ငါးခြောက်"
                            class="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white placeholder:text-white/40 focus:ring-2 focus:ring-indigo-400 outline-none mb-4">
@@ -88,7 +88,7 @@
             </button>
 
             <div x-show="activeForm === 'product'" x-collapse>
-                <form action="{{ url('/product/add') }}" method="POST" class="p-6 pt-0">
+                <form action="{{ route('products.store') }}" method="POST" class="p-6 pt-0">
                     @csrf
                     <select name="category_id" class="w-full bg-slate-800/80 border border-white/20 rounded-2xl px-4 py-3 text-white mb-3 outline-none">
                         @foreach($categories as $category)
@@ -113,7 +113,7 @@
                 <i class="fa-solid fa-chevron-down ml-auto transition-transform" :class="activeForm === 'area' ? 'rotate-180' : ''"></i>
             </button>
             <div x-show="activeForm === 'area'" x-collapse>
-                <form action="{{ url('/sourceArea/add') }}" method="POST" class="p-6 pt-0">
+                <form action="{{ route('sourceareas.store') }}" method="POST" class="p-6 pt-0">
                     @csrf
                     <input type="text" name="sourceArea" placeholder="ပွဲရုံအမည်" class="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white mb-4">
                     <button class="w-full py-3 bg-emerald-600 text-white rounded-2xl font-bold">သိမ်းရန်</button>
@@ -130,7 +130,7 @@
                 <i class="fa-solid fa-chevron-down ml-auto transition-transform" :class="activeForm === 'gate' ? 'rotate-180' : ''"></i>
             </button>
             <div x-show="activeForm === 'gate'" x-collapse>
-                <form action="{{ url('/gate/add') }}" method="POST" class="p-6 pt-0">
+                <form action="{{ route('gates.store') }}" method="POST" class="p-6 pt-0">
                     @csrf
                     <input type="text" name="gate" placeholder="ဂိတ်အမည်" class="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white mb-4">
                     <button class="w-full py-3 bg-amber-600 text-white rounded-2xl font-bold">သိမ်းရန်</button>
@@ -147,7 +147,7 @@
                 <i class="fa-solid fa-chevron-down ml-auto transition-transform" :class="activeForm === 'unit' ? 'rotate-180' : ''"></i>
             </button>
             <div x-show="activeForm === 'unit'" x-collapse>
-                <form action="{{ url('/unit/add') }}" method="POST" class="p-6 pt-0">
+                <form action="{{ route('units.store') }}" method="POST" class="p-6 pt-0">
                     @csrf
                     <input type="text" name="unit" placeholder="Unit အမည်" class="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white mb-4">
                     <button class="w-full py-3 bg-amber-600 text-white rounded-2xl font-bold">သိမ်းရန်</button>
@@ -163,7 +163,7 @@
                 <i class="fa-solid fa-chevron-down ml-auto transition-transform" :class="activeForm === 'shop' ? 'rotate-180' : ''"></i>
             </button>
             <div x-show="activeForm === 'shop'" x-collapse>
-                <form action="{{ url('/shop/add') }}" method="POST" class="p-6 pt-0">
+                <form action="{{ route('shops.store') }}" method="POST" class="p-6 pt-0">
                     @csrf
                     <input type="text" name="shop" placeholder="လွှဲပြောင်းအမည်" class="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white mb-4">
                     <button class="w-full py-3 bg-emerald-600 text-white rounded-2xl font-bold">သိမ်းရန်</button>
