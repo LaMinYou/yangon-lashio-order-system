@@ -34,7 +34,7 @@
         </div>
         @endif
 
-        <form class="p-6 sm:p-8" action="{{ route('orders.edit',$order->id) }}" method="POST">
+        <form class="p-6 sm:p-8" action="{{ route('orders.update',$order->id) }}" method="POST">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5">
@@ -167,7 +167,7 @@
                     <i class="fa-regular fa-floppy-disk"></i> သိမ်းမည်
                 </button>
                 <a href="{{ url('/user/'.auth()->user()->id.'/orders') }}" 
-                    class="w-full block mt-3 text-center text-red-500 bg-[#50d71e] font-bold py-3 px-6 rounded-md">
+                    class="w-full block mt-3 text-center text-white bg-[#50d71e] font-bold py-3 px-6 rounded-md">
                     <i class="fa-solid fa-xmark"></i> ပယ်ဖျက်မည်
                 </a>
             </div>

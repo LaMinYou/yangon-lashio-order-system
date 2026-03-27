@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/user/{id}/orders', [OrderController::class, 'show'])->name('orders.user');
 
-    Route::post('/orders/export', [OrderController::class, 'exportAll'])->name('orders.export');
+    Route::post('/export', [OrderController::class, 'exporting'])->name('orders.export');
 
     /*
     |--------------------------------------------------------------------------

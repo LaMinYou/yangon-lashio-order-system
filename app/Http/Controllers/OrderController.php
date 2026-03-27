@@ -126,39 +126,65 @@ class OrderController extends Controller
     }
     public function update(Request $request, Order $order)
     {
+        // Check if this is a Status Update from the Order Card
+        if ($request->has('status')) {
+            $status = (int)$request->status;
+            $statusText = match ($status) {
+                0 => 'ပို့နေဆဲ',
+                1 => 'ရောက်ပြီး',
+                2 => 'ရောင်းပြီး',
+                default => 'ပို့နေဆဲ',
+            };
+            $order->update(['status' => $statusText]);
+            return back()->with('success', 'အခြေအနေပြောင်းလဲပြီးပါပြီ');
+        }
+
+        // Check if this is a Remark/Shop Update from the Order Card
+        if ($request->has('remark') || $request->has('shop_id')) {
+            $order->update([
+                'shop_id' => $request->shop_id,
+                'remark' => $request->remark
+            ]);
+            return back()->with('success', 'မှတ်ချက်သိမ်းဆည်းပြီးပါပြီ');
+        }
+
+        // --- Otherwise, this is a FULL EDIT from the Edit Page ---
         $validator = Validator::make($request->all(), [
             'export_date' => 'required|date',
             'source_area_id' => 'required|exists:source_areas,id',
             'product_name' => 'required',
             'weight' => 'required|numeric',
             'netweight' => 'required|numeric',
-            'unit_id' => 'required|string',
+            'unit_id' => 'required',
             'price' => 'required|numeric',
         ]);
+
         if ($validator->fails()) {
             return back()->with('error', 'အချက်အလက်များကိုပြည့်စုံစွာထည့်ပါ');
         }
+
         try {
-            $order->export_date = $request->export_date;
-            $order->source_area_id = $request->source_area_id;
-            $order->product_name = $request->product_name;
-            $order->weight = $request->weight;
-            $order->net_weight = $request->netweight;
-            $order->unit_id = $request->unit_id;
-            $order->price = $request->price;
-            $order->total = $request->total;
-            $order->gate_id = $request->gate_id;
-            $order->weightfee = $request->weight_price;
-            //$order->shop_id = $request->shop_id ?? null;
-            $order->save();
-            return redirect("/user/" . Auth::id() . "/orders");
+            $order->update([
+                'export_date' => $request->export_date,
+                'source_area_id' => $request->source_area_id,
+                'product_name' => $request->product_name,
+                'weight' => $request->weight,
+                'net_weight' => $request->netweight,
+                'unit_id' => $request->unit_id,
+                'price' => $request->price,
+                'total' => $request->total,
+                'gate_id' => $request->gate_id,
+                'weightfee' => $request->weight_price,
+            ]);
+            return redirect("/user/" . Auth::id() . "/orders")->with('success', 'ပြင်ဆင်မှုအောင်မြင်ပါသည်။');
         } catch (\Exception $e) {
             return back()->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
         }
     }
 
-    public function exportAll(Request $request)
+    public function exporting(Request $request)
     {
+        
         $orders = json_decode(base64_decode($request->orders), true);
         //dd($orders);
         if (!$orders || count($orders) == 0) {
