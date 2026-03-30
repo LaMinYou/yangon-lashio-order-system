@@ -13,92 +13,87 @@ use App\Models\Unit;
 
 class FactController extends Controller
 {
-    
-    public function showFactForms(){
+    protected $models = [
+        'category'   => Category::class,
+        'sourcearea' => SourceArea::class,
+        'gate'       => Gate::class,
+        'shop'       => Shop::class,
+        'product'    => Product::class,
+        'unit'       => Unit::class,
+        'order'      => Order::class,
+    ];
+
+    public function showFactForms()
+    {
         $categories = Category::latest()->get();
         return view('addFacts', compact('categories'));
     }
-    public function edit($id){
-        $type = request()->type;
-        if($type == "category"){
-            $category = Category::find($id);
-            $category->update(['name' => request()->name]);
-            return redirect('/categories');
-        }
-        elseif($type == "sourcearea"){
-            $area = SourceArea::find($id);
-            $area->update(['name' => request()->name]);
-            return redirect('/sourceareas');
-        }elseif($type == "gate"){
-            $gate = Gate::find($id);
-            $gate->update(['name' => request()->name]);
-            return redirect('/gates');
-        }elseif($type == "shop"){
-            $shop = Shop::find($id);
-            $shop->update(['name' => request()->name]);
-            return redirect('/shops');
-        }elseif($type == "product"){
-            $product = Product::find($id);
-            $product->update(['name' => request()->name]);
-            return redirect('/products');
-        }elseif($type == "unit"){
-            $unit = Unit::find($id);
-            $unit->update(['name' => request()->name]);
-            return redirect('/units');
+
+    // 🔹 Update
+    public function edit($id, Request $request)
+    {
+        $request->validate([
+            'type' => 'required|string',
+            'name' => 'required|string|max:255'
+        ]);
+
+        $model = $this->resolveModel($request->type);
+
+        $record = $model::findOrFail($id);
+        $record->update(['name' => $request->name]);
+
+        return redirect($this->getRedirectPath($request->type));
+    }
+
+    // 🔹 Delete
+    public function delete($id, Request $request)
+    {
+        $request->validate([
+            'type' => 'required|string'
+        ]);
+
+        $model = $this->resolveModel($request->type);
+        $record = $model::findOrFail($id);
+
+        try {
+            // 🔥 Special rule for product
+            if ($request->type === 'product') {
+                if (Order::where('product_id', $id)->exists()) {
+                    return back()->with('error', 'ဤအချက်လက်နှင့်ဆိုင်သောတင်ပို့ကုန်စာရင်းများရှိနေပါသဖြင့် ဖျက်၍မရပါ။');
+                }
+            }
+
+            $record->delete();
+
+            return redirect($this->getRedirectPath($request->type));
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'ဖျက်ရာတွင် အမှားတစ်ခုဖြစ်နေပါသည်။');
         }
     }
-    public function delete($id){
-        $type = request()->type;
-        
-        if($type == "sourcearea"){
-            $area = SourceArea::find($id);
-           try{
-                $area->delete();
-                return redirect('/sourceareas');
-           }catch(\Exception $e){
-                return redirect('/sourceareas')->with('error', 'ဤအချက်လက်နှင့်ဆိုင်သောတင်ပို့ကုန်စာရင်းများရှိနေပါသဖြင့် ဖျက်၍မရပါ။');
-           }
-        }elseif($type == "gate"){
-            $gate = Gate::find($id);
-            try{
-                $gate->delete();
-                return redirect('/gates');
-           }catch(\Exception $e){
-                return redirect('/gates')->with('error', 'ဤအချက်လက်နှင့်ဆိုင်သောတင်ပို့ကုန်စာရင်းများရှိနေပါသဖြင့် ဖျက်၍မရပါ။');
-           }
-        }elseif($type == "shop"){
-            $shop = Shop::find($id);
-            try{
-                $shop->delete();
-                return redirect('/shops');
-           }catch(\Exception $e){
-                return redirect('/shops')->with('error', 'ဤအချက်လက်နှင့်ဆိုင်သောတင်ပို့ကုန်စာရင်းများရှိနေပါသဖြင့် ဖျက်၍မရပါ။');
-           }
-        }elseif($type == "product"){
-            $product = Product::find($id);
-            try{
-                $product->delete();
-                return redirect('/products');
-           }catch(\Exception $e){
-                return redirect('/products')->with('error', 'ဤအချက်လက်နှင့်ဆိုင်သောတင်ပို့ကုန်စာရင်းများရှိနေပါသဖြင့် ဖျက်၍မရပါ။');
-           }
-        }elseif($type == "order"){
-            $order = Order::find($id);
-            try{
-                $order->delete();
-                return redirect('/orders');
-           }catch(\Exception $e){
-                return redirect('/products')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
-           }
+
+    // 🔹 Resolve Model
+    private function resolveModel($type)
+    {
+        if (!array_key_exists($type, $this->models)) {
+            abort(404, 'Invalid type');
         }
-        elseif($type == "unit"){
-            $unit = Unit::find($id);
-            try{
-                $unit->delete();
-                return redirect("/units");
-            }catch(\Exception $e){
-                return redirect('/units')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
-            }
-        }
+
+        return $this->models[$type];
+    }
+
+    // 🔹 Redirect Path
+    private function getRedirectPath($type)
+    {
+        return match ($type) {
+            'category'   => '/categories',
+            'sourcearea' => '/sourceareas',
+            'gate'       => '/gates',
+            'shop'       => '/shops',
+            'product'    => '/products',
+            'unit'       => '/units',
+            'order'      => '/orders',
+            default      => '/',
+        };
     }
 }
