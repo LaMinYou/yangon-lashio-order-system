@@ -1,10 +1,23 @@
 @extends("layouts.app")
 
 @section("title", "Orders")
-
 @section("content")
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
+     @if(session('error'))
+    <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-start my-3 justify-center px-4">
+            <div class="bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white max-w-sm w-full text-center">
+                <div class="mb-4 text-6xl">
+                    <i class="fa-solid fa-xmark text-2xl text-red-600"></i>
+                </div>
+                <p class="font-bold text-lg mb-6 text-red-500">
+                    {{ session('error') }}
+                </p>
+                <button @click="show = false" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold">
+                    Done
+                </button>
+            </div>
+        </div>
+    @endif
     {{-- 1. Export Form (POST orders/export) --}}
     @if(isset($orders) && $orders->isNotEmpty())
     <div class="flex justify-end mb-6">
@@ -24,8 +37,8 @@
     <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-8 shadow-sm">
         {{-- DYNAMIC ROUTE SELECTION --}}
         @php
-            $searchRoute = (auth()->user()->role_id == 2) 
-                ? route('orders.index') 
+            $searchRoute = (auth()->user()->role_id == 2)
+                ? route('orders.index')
                 : route('orders.user', auth()->id());
         @endphp
 

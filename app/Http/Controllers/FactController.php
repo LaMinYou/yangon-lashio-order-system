@@ -62,7 +62,6 @@ class FactController extends Controller
                     return back()->with('error', 'ဤအချက်လက်နှင့်ဆိုင်သောတင်ပို့ကုန်စာရင်းများရှိနေပါသဖြင့် ဖျက်၍မရပါ။');
                 }
             }
-
             $record->delete();
 
             return redirect($this->getRedirectPath($request->type));

@@ -1,8 +1,9 @@
 @props(['order', 'shops'])
 
-<div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition group mb-4" x-data="{ open: false }">
+<div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition group mb-4" x-data="{ open: false, deleteOrder: false }">
     {{-- Header: Date + Status --}}
     <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+         <x-orderDeleteDialog :order='$order' />
         <div class="flex lg:flex-col items-center lg:items-start justify-between lg:justify-start lg:w-32 border-b lg:border-b-0 lg:border-r border-slate-100 pb-4 lg:pb-0">
             {{-- Export Date --}}
             <span class="text-slate-400 text-sm font-medium uppercase">
@@ -66,6 +67,11 @@
             <button @click="open = !open" class="bg-slate-50 hover:bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl text-sm font-bold transition flex-grow lg:flex-grow-0">
                 Details
             </button>
+            <button @click="deleteOrder = true" type="button"
+                class="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                <i class="fa-solid fa-trash-can text-lg"></i>
+            </button>
+
 
             {{-- Role 1: Edit --}}
             @if(auth()->user()->role_id == 1)

@@ -78,7 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
     Route::get('/user/{id}/orders', [OrderController::class, 'show'])->name('orders.user');
-
+    Route::delete('/orders/delete/{order}', [OrderController::class, 'destroy'])->name('orders.delete');
     Route::post('/export', [OrderController::class, 'exporting'])->name('orders.export');
 
     /*

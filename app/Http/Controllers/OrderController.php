@@ -87,7 +87,7 @@ class OrderController extends Controller
             ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
             ->withQueryString();
-        
+
         $shops = Shop::latest()->get();
         return view('orders', compact('orders', 'shops'));
     }
@@ -181,10 +181,25 @@ class OrderController extends Controller
             return back()->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
         }
     }
-
+    public function destroy(Order $order){
+        try{
+            $order->delete();
+            if(Auth::user()->role_id == 2){
+                return redirect('/orders');
+            }else{
+                return redirect('/user/'. Auth::user()->id .'/orders');
+            }
+        }catch(\Exception $e){
+            if(Auth::user()->role_id == 2){
+                return redirect('/orders')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
+            }else{
+                return redirect('/user/'. Auth::user()->id .'/orders')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
+            }
+        }
+    }
     public function exporting(Request $request)
     {
-        
+
         $orders = json_decode(base64_decode($request->orders), true);
         //dd($orders);
         if (!$orders || count($orders) == 0) {
