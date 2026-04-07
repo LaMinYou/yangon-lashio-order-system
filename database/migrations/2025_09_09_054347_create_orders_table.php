@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger("source_area_id");
             $table->unsignedBigInteger("category_id");
             $table->string("product_name");
+            $table->integer("count")->default(1);
             $table->double("weight");
             $table->double("net_weight");
             $table->double("price");

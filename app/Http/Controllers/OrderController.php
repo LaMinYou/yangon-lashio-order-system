@@ -37,6 +37,7 @@ class OrderController extends Controller
             'source_area_id' => 'required|exists:source_areas,id',
             'category_id' => 'required|exists:categories,id',
             'product' => 'required|string',
+            'count' => 'required',
             'weight' => 'required|numeric',
             'netweight' => 'required|numeric',
             'price' => 'required|numeric',
@@ -52,6 +53,7 @@ class OrderController extends Controller
             $order->source_area_id = $request->source_area_id;
             $order->category_id = $request->category_id;
             $order->product_name = $request->product;
+            $order->count = $request->count;
             $order->weight = $request->weight;
             $order->net_weight = $request->netweight;
             $order->unit_id = $request->unit_id;
@@ -168,6 +170,7 @@ class OrderController extends Controller
             'export_date' => 'required|date',
             'source_area_id' => 'required|exists:source_areas,id',
             'product_name' => 'required',
+            'count' => 'required',
             'weight' => 'required|numeric',
             'netweight' => 'required|numeric',
             'unit_id' => 'required',
@@ -183,6 +186,7 @@ class OrderController extends Controller
                 'export_date' => $request->export_date,
                 'source_area_id' => $request->source_area_id,
                 'product_name' => $request->product_name,
+                'count' => $request->count,
                 'weight' => $request->weight,
                 'net_weight' => $request->netweight,
                 'unit_id' => $request->unit_id,
@@ -239,6 +243,7 @@ class OrderController extends Controller
                 'Weight',
                 'Net Weight',
                 'Unit',
+                'Count',
                 'Price',
                 'Total Price',
                 'Status',
@@ -266,6 +271,7 @@ class OrderController extends Controller
                     $order->weight ?? 0,
                     $order->net_weight ?? 0,
                     $order->unit['name'] ?? '',
+                    $order->count ?? 1,
                     $order->price ?? 0,
                     $order->total ?? 0,
                     $order->status ?? '',
@@ -279,9 +285,9 @@ class OrderController extends Controller
         }
 
         $lastDataRow = $row - 1;
-        $sheet->setCellValue("I{$row}", 'Grand Total');
-        $sheet->setCellValue("J{$row}", "=SUM(J2:J{$lastDataRow})");
-        $sheet->getStyle("I{$row}:J{$row}")->getFont()->setBold(true);
+        $sheet->setCellValue("J{$row}", 'Grand Total');
+        $sheet->setCellValue("K{$row}", "=SUM(K2:K{$lastDataRow})");
+        $sheet->getStyle("J{$row}:K{$row}")->getFont()->setBold(true);
 
         $fileName = 'orders_export_' . now()->format('Y-m-d') . '.xlsx';
         $writer = new Xlsx($spreadsheet);

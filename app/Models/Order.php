@@ -12,6 +12,7 @@ class Order extends Model
         'source_area_id',
         'category_id',
         'product_name',
+        'count',
         'weight',
         'net_weight',
         'unit_id',

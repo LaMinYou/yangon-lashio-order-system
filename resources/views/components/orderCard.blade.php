@@ -111,8 +111,8 @@
                 <p class="text-slate-700 font-medium">{{ $order->weight }} / {{ $order->net_weight }} ပိဿာ</p>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-slate-400 uppercase">ဈေးနှုန်း / Unit</p>
-                <p class="text-slate-700 font-medium">{{ number_format($order->price) }} MMK ({{ $order->unit->name }})</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase">ဈေးနှုန်း / Unit - အရေအတွက်</p>
+                <p class="text-slate-700 font-medium">{{ number_format($order->price) }} MMK ({{ $order->unit->name }} - {{ $order->count }})</p>
             </div>
             @if(auth()->user()->role_id == 1)
             <div>

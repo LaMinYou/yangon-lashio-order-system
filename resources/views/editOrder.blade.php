@@ -126,6 +126,12 @@
                     </div>
                 </div>
 
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">အရေအတွက်</label>
+                    <input type="number" name="count" id="count" placeholder="eg. 1" value="{{ $order->count }}" required
+                        class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                </div>
+
                 <div class="md:col-span-3">
                     <label for="gate" class="block text-sm font-semibold text-gray-700 mb-1">ဂိတ်</label>
                     <select name="gate_id" id="gate" required
