@@ -15,6 +15,7 @@ use App\Models\Unit;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Response;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 
 use function PHPUnit\Framework\isEmpty;
@@ -217,13 +218,91 @@ class OrderController extends Controller
             }
         }
     }
+    // public function exporting(Request $request)
+    // {
+    //     // Decode the base64 encoded JSON string
+    //     $orders = json_decode(base64_decode($request->exportOrders), true);
+
+    //     // If you used base64_encode(json_encode($exportOrders)) in blade, 
+    //     // $orders is now a simple sequential array of order data.
+
+    //     if (!$orders || count($orders) == 0) {
+    //         return back()->with('error', 'No orders available for export.');
+    //     }
+
+    //     $spreadsheet = new Spreadsheet();
+    //     $sheet = $spreadsheet->getActiveSheet();
+
+    //     // Headings
+    //     $sheet->fromArray([
+    //         [
+    //             'Export Date',
+    //             'Exporter',
+    //             'Source Area',
+    //             'Category',
+    //             'Product Name',
+    //             'Weight',
+    //             'Net Weight',
+    //             'Unit',
+    //             'Count',
+    //             'Price',
+    //             'Total Price',
+    //             'Status',
+    //             'Gate',
+    //             'Shop(Refer To)',
+    //             'Weight Fee'
+    //         ]
+    //     ]);
+
+    //     $sheet->getStyle('A1:N1')->getFont()->setBold(true);
+
+    //     $row = 2;
+    //     // REMOVED ['data'] loop because $orders is already the array of records
+    //     foreach ($orders as $orderData) {
+    //         // Convert to object for easier access, though array syntax works too
+    //         $order = (object)$orderData;
+
+    //         $sheet->fromArray([
+    //             [
+    //                 $order->export_date ?? '',
+    //                 $order->user['name'] ?? '',
+    //                 $order->source_area['name'] ?? '',
+    //                 $order->category['name'] ?? '',
+    //                 $order->product_name ?? '',
+    //                 $order->weight ?? 0,
+    //                 $order->net_weight ?? 0,
+    //                 $order->unit['name'] ?? '',
+    //                 $order->count ?? 1,
+    //                 $order->price ?? 0,
+    //                 $order->total ?? 0,
+    //                 $order->status ?? '',
+    //                 $order->gate['name'] ?? '',
+    //                 $order->shop['name'] ?? '',
+    //                 $order->weightfee ?? 0
+    //             ]
+    //         ], null, "A{$row}");
+
+    //         $row++;
+    //     }
+
+    //     $lastDataRow = $row - 1;
+    //     $sheet->setCellValue("J{$row}", 'Grand Total');
+    //     $sheet->setCellValue("K{$row}", "=SUM(K2:K{$lastDataRow})");
+    //     $sheet->getStyle("J{$row}:K{$row}")->getFont()->setBold(true);
+
+    //     $fileName = 'orders_export_' . now()->format('Y-m-d') . '.xlsx';
+    //     $writer = new Xlsx($spreadsheet);
+
+    //     // Use a temp path to avoid permission issues on some servers
+    //     $tempFile = tempnam(sys_get_temp_dir(), 'export');
+    //     $writer->save($tempFile);
+
+    //     return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    // }
+
     public function exporting(Request $request)
     {
-        // Decode the base64 encoded JSON string
         $orders = json_decode(base64_decode($request->exportOrders), true);
-
-        // If you used base64_encode(json_encode($exportOrders)) in blade, 
-        // $orders is now a simple sequential array of order data.
 
         if (!$orders || count($orders) == 0) {
             return back()->with('error', 'No orders available for export.');
@@ -248,17 +327,18 @@ class OrderController extends Controller
                 'Total Price',
                 'Status',
                 'Gate',
-                'Shop',
+                'Shop(Refer To)',
                 'Weight Fee'
             ]
         ]);
 
-        $sheet->getStyle('A1:N1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:O1')->getFont()->setBold(true);
+
+        // Number format for MMK with Comma
+        $mmkFormat = '#,##0 "MMK"';
 
         $row = 2;
-        // REMOVED ['data'] loop because $orders is already the array of records
         foreach ($orders as $orderData) {
-            // Convert to object for easier access, though array syntax works too
             $order = (object)$orderData;
 
             $sheet->fromArray([
@@ -281,18 +361,35 @@ class OrderController extends Controller
                 ]
             ], null, "A{$row}");
 
+            // Price နဲ့ Total Column တွေကို MMK format သတ်မှတ်ခြင်း
+            $sheet->getStyle("J{$row}:K{$row}")
+                ->getNumberFormat()
+                ->setFormatCode($mmkFormat);
+
             $row++;
         }
 
         $lastDataRow = $row - 1;
+
+        // Grand Total Row
         $sheet->setCellValue("J{$row}", 'Grand Total');
         $sheet->setCellValue("K{$row}", "=SUM(K2:K{$lastDataRow})");
+
+        // Grand Total ကို Comma + MMK format သတ်မှတ်ပြီး Bold တင်ခြင်း
+        $sheet->getStyle("K{$row}")
+            ->getNumberFormat()
+            ->setFormatCode($mmkFormat);
+
         $sheet->getStyle("J{$row}:K{$row}")->getFont()->setBold(true);
+
+        // Auto fit column width
+        foreach (range('A', 'O') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
 
         $fileName = 'orders_export_' . now()->format('Y-m-d') . '.xlsx';
         $writer = new Xlsx($spreadsheet);
 
-        // Use a temp path to avoid permission issues on some servers
         $tempFile = tempnam(sys_get_temp_dir(), 'export');
         $writer->save($tempFile);
 
