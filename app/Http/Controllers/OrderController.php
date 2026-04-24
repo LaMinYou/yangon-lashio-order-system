@@ -218,13 +218,10 @@ class OrderController extends Controller
             }
         }
     }
+
     // public function exporting(Request $request)
     // {
-    //     // Decode the base64 encoded JSON string
     //     $orders = json_decode(base64_decode($request->exportOrders), true);
-
-    //     // If you used base64_encode(json_encode($exportOrders)) in blade, 
-    //     // $orders is now a simple sequential array of order data.
 
     //     if (!$orders || count($orders) == 0) {
     //         return back()->with('error', 'No orders available for export.');
@@ -254,12 +251,13 @@ class OrderController extends Controller
     //         ]
     //     ]);
 
-    //     $sheet->getStyle('A1:N1')->getFont()->setBold(true);
+    //     $sheet->getStyle('A1:O1')->getFont()->setBold(true);
+
+    //     // Number format for MMK with Comma
+    //     $mmkFormat = '#,##0 "MMK"';
 
     //     $row = 2;
-    //     // REMOVED ['data'] loop because $orders is already the array of records
     //     foreach ($orders as $orderData) {
-    //         // Convert to object for easier access, though array syntax works too
     //         $order = (object)$orderData;
 
     //         $sheet->fromArray([
@@ -282,18 +280,35 @@ class OrderController extends Controller
     //             ]
     //         ], null, "A{$row}");
 
+    //         // Price နဲ့ Total Column တွေကို MMK format သတ်မှတ်ခြင်း
+    //         $sheet->getStyle("J{$row}:K{$row}")
+    //             ->getNumberFormat()
+    //             ->setFormatCode($mmkFormat);
+
     //         $row++;
     //     }
 
     //     $lastDataRow = $row - 1;
+
+    //     // Grand Total Row
     //     $sheet->setCellValue("J{$row}", 'Grand Total');
     //     $sheet->setCellValue("K{$row}", "=SUM(K2:K{$lastDataRow})");
+
+    //     // Grand Total ကို Comma + MMK format သတ်မှတ်ပြီး Bold တင်ခြင်း
+    //     $sheet->getStyle("K{$row}")
+    //         ->getNumberFormat()
+    //         ->setFormatCode($mmkFormat);
+
     //     $sheet->getStyle("J{$row}:K{$row}")->getFont()->setBold(true);
+
+    //     // Auto fit column width
+    //     foreach (range('A', 'O') as $columnID) {
+    //         $sheet->getColumnDimension($columnID)->setAutoSize(true);
+    //     }
 
     //     $fileName = 'orders_export_' . now()->format('Y-m-d') . '.xlsx';
     //     $writer = new Xlsx($spreadsheet);
 
-    //     // Use a temp path to avoid permission issues on some servers
     //     $tempFile = tempnam(sys_get_temp_dir(), 'export');
     //     $writer->save($tempFile);
 
@@ -311,9 +326,10 @@ class OrderController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Headings
+        // 1. Headings (နံပါတ်စဉ် 'No.' ကို ရှေ့ဆုံးက ထည့်ထားပါတယ်)
         $sheet->fromArray([
             [
+                'No.',
                 'Export Date',
                 'Exporter',
                 'Source Area',
@@ -332,18 +348,26 @@ class OrderController extends Controller
             ]
         ]);
 
-        $sheet->getStyle('A1:O1')->getFont()->setBold(true);
+        // Range ပြောင်းသွားတဲ့အတွက် A1:P1 ဖြစ်သွားပါမယ် (Column တစ်ခုတိုးသွားလို့)
+        $sheet->getStyle('A1:P1')->getFont()->setBold(true);
 
-        // Number format for MMK with Comma
         $mmkFormat = '#,##0 "MMK"';
-
         $row = 2;
+        $no = 1; // နံပါတ်စဉ်အတွက် variable
+
         foreach ($orders as $orderData) {
             $order = (object)$orderData;
 
+            // 2. Date Format ပြောင်းလဲခြင်း (Apr 07, 2026)
+            $formattedDate = '';
+            if (!empty($order->export_date)) {
+                $formattedDate = \Carbon\Carbon::parse($order->export_date)->format('M d, Y');
+            }
+
             $sheet->fromArray([
                 [
-                    $order->export_date ?? '',
+                    $no++, // နံပါတ်စဉ် ထည့်ခြင်းနှင့် auto increment လုပ်ခြင်း
+                    $formattedDate, // format ပြောင်းထားသော date
                     $order->user['name'] ?? '',
                     $order->source_area['name'] ?? '',
                     $order->category['name'] ?? '',
@@ -361,8 +385,8 @@ class OrderController extends Controller
                 ]
             ], null, "A{$row}");
 
-            // Price နဲ့ Total Column တွေကို MMK format သတ်မှတ်ခြင်း
-            $sheet->getStyle("J{$row}:K{$row}")
+            // Column Index များ တစ်ဆင့်စီ ရွေ့သွားသည့်အတွက် J, K မှ K, L သို့ ပြောင်းရပါမည်
+            $sheet->getStyle("K{$row}:L{$row}")
                 ->getNumberFormat()
                 ->setFormatCode($mmkFormat);
 
@@ -371,19 +395,18 @@ class OrderController extends Controller
 
         $lastDataRow = $row - 1;
 
-        // Grand Total Row
-        $sheet->setCellValue("J{$row}", 'Grand Total');
-        $sheet->setCellValue("K{$row}", "=SUM(K2:K{$lastDataRow})");
+        // Grand Total Row (Column K နှင့် L သို့ ရွှေ့လိုက်ပါသည်)
+        $sheet->setCellValue("K{$row}", 'Grand Total');
+        $sheet->setCellValue("L{$row}", "=SUM(L2:L{$lastDataRow})");
 
-        // Grand Total ကို Comma + MMK format သတ်မှတ်ပြီး Bold တင်ခြင်း
-        $sheet->getStyle("K{$row}")
+        $sheet->getStyle("L{$row}")
             ->getNumberFormat()
             ->setFormatCode($mmkFormat);
 
-        $sheet->getStyle("J{$row}:K{$row}")->getFont()->setBold(true);
+        $sheet->getStyle("K{$row}:L{$row}")->getFont()->setBold(true);
 
-        // Auto fit column width
-        foreach (range('A', 'O') as $columnID) {
+        // Auto fit column width (A မှ P အထိ)
+        foreach (range('A', 'P') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 

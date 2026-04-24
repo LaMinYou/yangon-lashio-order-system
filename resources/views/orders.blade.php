@@ -96,11 +96,10 @@
     <div class="flex flex-col sm:flex-row justify-between items-baseline mb-6 px-2">
         <h2 class="text-2xl font-bold text-slate-800">တင်ပို့ကုန်စာရင်း</h2>
         <p class="text-sm text-slate-400 font-medium">
-            @if($orders instanceof \Illuminate\Pagination\LengthAwarePaginator)
-            Showing <span class="text-indigo-600 font-bold">{{ $orders->firstItem() }}-{{ $orders->lastItem() }}</span> of {{ $orders->total() }}
-            @else
-            Total <span class="text-indigo-600 font-bold">{{ count($orders) }}</span> records
-            @endif
+            @php
+            $shippingCount = $orders->where('status', 'ပို့နေဆဲ')->count();
+            @endphp
+            ပို့နေဆဲအရေတွက် <span class="text-orange-600 font-bold">{{ $shippingCount }} </span>
         </p>
     </div>
 
