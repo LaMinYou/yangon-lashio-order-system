@@ -97,7 +97,7 @@
         <h2 class="text-2xl font-bold text-slate-800">တင်ပို့ကုန်စာရင်း</h2>
         <p class="text-sm text-slate-400 font-medium">
             @php
-            $shippingCount = $orders->where('status', 'ပို့နေဆဲ')->count();
+            $shippingCount = $exportOrders->where('status', 'ပို့နေဆဲ')->count();
             @endphp
             ပို့နေဆဲအရေတွက် <span class="text-orange-600 font-bold">{{ $shippingCount }} </span>
         </p>
